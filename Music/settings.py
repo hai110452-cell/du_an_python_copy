@@ -1,4 +1,3 @@
-
 import os
 from pathlib import Path
 
@@ -8,7 +7,7 @@ SECRET_KEY = 'django-insecure-@q197fcbk1nb=ub2=hy79xgenzbs+btxiut2wyq1u(r(lgi0)b
 
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*'] # Để dấu * để dễ dàng chạy trên mọi server lúc mới deploy
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -23,10 +22,12 @@ INSTALLED_APPS = [
     'exclusive',
     'category',
     'register',
+    'whitenoise.runserver_nostatic', # Thêm dòng này để hỗ trợ WhiteNoise
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware', # PHẢI ĐẶT NGAY DƯỚI SecurityMiddleware
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -84,9 +85,19 @@ USE_I18N = True
 
 USE_TZ = True
 
+# CẤU HÌNH FILE TĨNH (STATIC)
 STATIC_URL = 'static/'
+STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')] # Nơi chứa file CSS/JS lúc bạn code
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')  # Nơi gom file khi chạy collectstatic
+
+# CẤU HÌNH FILE MEDIA (NHẠC/ẢNH)
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
+# Cấu hình nén và lưu trữ lâu dài cho WhiteNoise
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'
+
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
