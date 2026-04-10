@@ -1,0 +1,215 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="login-page-wrapper">
+  <div class="login-form-card">
+    <div class="auth-tabs">
+      <a href="{% url 'login' %}" class="auth-tab active">Đăng nhập</a>
+      <a href="{% url 'register:register' %}" class="auth-tab">Đăng ký</a>
+    </div>
+
+    <form method="post" class="custom-django-form" id="authForm">
+      {% csrf_token %}
+
+      <div class="form-fields-container">
+        {{ form.as_p }}
+      </div>
+
+      <button type="submit" class="btn-primary-gold">ĐĂNG NHẬP</button>
+    </form>
+
+    {% if form.errors %}
+    <div class="auth-error-container">
+      <p class="auth-error-msg">Thông tin đăng nhập không chính xác</p>
+    </div>
+    {% endif %}
+  </div>
+</div>
+
+<style>
+  /* 1. RESET & NỀN */
+  html,
+  body {
+    background-color: #000000 !important;
+    margin: 0;
+    padding: 0;
+  }
+
+  * {
+    outline: none !important;
+    box-shadow: none !important;
+    box-sizing: border-box;
+  }
+
+  .login-page-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 90vh;
+  }
+
+  .login-form-card {
+    background: #121212;
+    width: 100%;
+    max-width: 480px;
+    padding: 50px 45px;
+    border-radius: 30px;
+    border: 1px solid #bf953f;
+    box-shadow: 0 0 40px rgba(191, 149, 63, 0.2) !important;
+    text-align: center;
+  }
+
+  /* 2. TABS ĐĂNG NHẬP (SÁNG) */
+  .auth-tabs {
+    display: flex;
+    justify-content: center;
+    gap: 40px;
+    margin-bottom: 40px;
+    border-bottom: 1px solid rgba(191, 149, 63, 0.2);
+    padding-bottom: 20px;
+  }
+
+  .auth-tab {
+    text-decoration: none;
+    color: #444;
+    font-family: 'Playfair Display', serif;
+    font-weight: 900;
+    font-size: 1.5rem;
+    text-transform: uppercase;
+    transition: 0.3s;
+  }
+
+  .auth-tab.active {
+    color: #fcf6ba;
+    text-shadow: 0 0 15px rgba(191, 149, 63, 0.6);
+    position: relative;
+  }
+
+  .auth-tab.active::after {
+    content: '';
+    position: absolute;
+    bottom: -21px;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background: linear-gradient(to right, #bf953f, #fcf6ba);
+  }
+
+  /* 3. ÉP MÀU ĐEN CHO Ô NHẬP LIỆU (DIỆT AUTOFILL TRẮNG) */
+  .custom-django-form p {
+    text-align: left;
+    margin-bottom: 30px;
+    position: relative;
+  }
+
+  .custom-django-form label {
+    display: block;
+    font-size: 0.8rem;
+    color: #bf953f;
+    margin-bottom: 10px;
+    font-weight: bold;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    padding-left: 20px;
+  }
+
+  .custom-django-form input {
+    width: 100%;
+    background-color: #000 !important;
+    border: 1.5px solid #bf953f !important;
+    border-radius: 100px;
+    padding: 14px 50px 14px 25px;
+    /* Padding phải rộng để chứa icon */
+    color: #ffffff !important;
+    font-size: 1rem;
+    transition: 0.3s ease;
+  }
+
+  /* Diệt tận gốc nền trắng của trình duyệt */
+  .custom-django-form input:-webkit-autofill,
+  .custom-django-form input:-webkit-autofill:hover,
+  .custom-django-form input:-webkit-autofill:focus,
+  .custom-django-form input:-webkit-autofill:active {
+    -webkit-text-fill-color: #ffffff !important;
+    -webkit-box-shadow: 0 0 0px 1000px #000 inset !important;
+    transition: background-color 5000s ease-in-out 0s;
+  }
+
+  /* 4. CĂN CHỈNH ICON MẮT & FORGOT */
+  .toggle-password-btn {
+    position: absolute;
+    right: 25px;
+    top: 45px;
+    /* Điều chỉnh để nằm giữa ô input password */
+    color: #bf953f;
+    cursor: pointer;
+    font-size: 1.2rem;
+    z-index: 5;
+  }
+
+  .dynamic-forgot-link {
+    display: block;
+    text-align: right;
+    font-size: 0.75rem;
+    color: #bf953f;
+    text-decoration: none;
+    margin-top: 8px;
+    padding-right: 15px;
+    transition: 0.3s;
+  }
+
+  .dynamic-forgot-link:hover {
+    color: #fcf6ba;
+    text-decoration: underline;
+  }
+
+  .btn-primary-gold {
+    width: 100%;
+    font-family: 'Playfair Display', serif;
+    font-weight: 900;
+    font-size: 1.1rem;
+    height: 60px;
+    border-radius: 100px;
+    background: transparent;
+    border: 2px solid #bf953f;
+    color: #fcf6ba;
+    text-transform: uppercase;
+    cursor: pointer;
+    margin-top: 15px;
+    letter-spacing: 2px;
+    transition: 0.3s;
+  }
+
+  .btn-primary-gold:hover {
+    background: #bf953f;
+    color: #000 !important;
+  }
+</style>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const passwordInputs = document.querySelectorAll('#authForm input[type="password"]');
+
+    passwordInputs.forEach((input, index) => {
+      // Chèn icon mắt
+      const eyeIcon = document.createElement('i');
+      eyeIcon.className = 'bi bi-eye-slash toggle-password-btn';
+      input.parentNode.appendChild(eyeIcon);
+
+      eyeIcon.addEventListener('click', function () {
+        const type = input.getAttribute('type') === 'password' ? 'text' : 'password';
+        input.setAttribute('type', type);
+        this.classList.toggle('bi-eye');
+        this.classList.toggle('bi-eye-slash');
+      });
+
+      // Chèn link Forgot password ngay dưới ô password
+      const forgotLink = document.createElement('a');
+      forgotLink.href = "#";
+      forgotLink.className = 'dynamic-forgot-link';
+      forgotLink.innerText = 'Forgot password?';
+      input.parentNode.appendChild(forgotLink);
+    });
+  });
+</script>
+{% endblock %}

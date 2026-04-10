@@ -1,0 +1,209 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div style="text-align: center; margin-top: 20px;">
+  <h2 style="color: white;">{{ item.title }}</h2>
+  <p style="color: rgba(255,255,255,0.7);">{{ item.content }}</p>
+
+  {% if item.image %}
+  <img src="{{ item.image.url }}"
+    style="max-width: 300px; margin: 20px 0; border-radius: 12px; border: 1px solid rgba(255,255,255,0.1); box-shadow: 0 4px 15px rgba(0,0,0,0.5);" />
+  {% endif %}
+
+  {% if item.audio %}
+  <audio id="myAudio">
+    <source src="{{ item.audio.url }}" type="audio/mpeg" />
+  </audio>
+
+  <style>
+    .custom-player-container {
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+
+    .player-controls {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 25px;
+      margin-bottom: 25px;
+    }
+
+    .btn-player {
+      background: none;
+      border: none;
+      color: white;
+      font-size: 1.5rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: opacity 0.2s;
+    }
+
+    .btn-play-pause {
+      background: white !important;
+      color: black !important;
+      width: 55px;
+      height: 55px;
+      border-radius: 50%;
+      font-size: 1.8rem;
+      opacity: 1 !important;
+    }
+
+    .player-progress-area {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      color: white;
+      font-family: sans-serif;
+      font-size: 0.9rem;
+    }
+
+    .progress-bar-container {
+      flex-grow: 1;
+      height: 4px;
+      background: rgba(255, 255, 255, 0.2);
+      border-radius: 2px;
+      cursor: pointer;
+      position: relative;
+    }
+
+    .progress-bar-fill {
+      height: 100%;
+      background: white;
+      border-radius: 2px;
+      width: 0%;
+    }
+  </style>
+
+  <div class="custom-player-container">
+    <div class="player-controls">
+      <button class="btn-player"><i class="bi bi-shuffle"></i></button>
+      <button class="btn-player"><i class="bi bi-skip-start-fill"></i></button>
+      <button class="btn-player btn-play-pause" onclick="togglePlay()">
+        <i id="play-icon" class="bi bi-play-fill"></i>
+      </button>
+      <button class="btn-player"><i class="bi bi-skip-end-fill"></i></button>
+      <button class="btn-player"><i class="bi bi-repeat"></i></button>
+    </div>
+    <div class="player-progress-area">
+      <span class="time-text" id="current-time">00:00</span>
+      <div class="progress-bar-container" id="progress-container" onclick="setProgress(event)">
+        <div class="progress-bar-fill" id="progress-fill"></div>
+      </div>
+      <span class="time-text" id="total-duration">00:00</span>
+    </div>
+  </div>
+
+  <script>
+    const audio = document.getElementById("myAudio");
+    const playIcon = document.getElementById("play-icon");
+    const progressFill = document.getElementById("progress-fill");
+    const currentTimeEl = document.getElementById("current-time");
+    const totalDurationEl = document.getElementById("total-duration");
+
+    function togglePlay() {
+      if (audio.paused) {
+        audio.play();
+        playIcon.classList.remove("bi-play-fill");
+        playIcon.classList.add("bi-pause-fill");
+      } else {
+        audio.pause();
+        playIcon.classList.remove("bi-pause-fill");
+        playIcon.classList.add("bi-play-fill");
+      }
+    }
+
+    function formatTime(seconds) {
+      if (isNaN(seconds)) return "00:00";
+      let min = Math.floor(seconds / 60);
+      let sec = Math.floor(seconds % 60);
+      return (min < 10 ? "0" + min : min) + ":" + (sec < 10 ? "0" + sec : sec);
+    }
+
+    audio.addEventListener("loadedmetadata", () => {
+      totalDurationEl.textContent = formatTime(audio.duration);
+    });
+
+    audio.addEventListener("timeupdate", () => {
+      currentTimeEl.textContent = formatTime(audio.currentTime);
+      const progressPercent = (audio.currentTime / audio.duration) * 100;
+      progressFill.style.width = progressPercent + "%";
+    });
+
+    audio.addEventListener("ended", () => {
+      playIcon.classList.remove("bi-pause-fill");
+      playIcon.classList.add("bi-play-fill");
+      progressFill.style.width = "0%";
+      currentTimeEl.textContent = "00:00";
+    });
+
+    function setProgress(e) {
+      const width = document.getElementById("progress-container").clientWidth;
+      const clickX = e.offsetX;
+      audio.currentTime = (clickX / width) * audio.duration;
+    }
+  </script>
+  {% endif %}
+</div>
+
+<div style="text-align: center; margin-top: 30px;">
+  {% if user.is_authenticated %}
+  {% if not is_downloaded %}
+  <a href="{% url 'exclusive:add_download' type item.id %}?next={{ request.path }}"
+    class="btn-glow d-inline-block text-decoration-none"
+    style="background: #1db954; color: white; width: auto; padding: 12px 30px; margin: 5px; border-radius: 30px; font-weight: bold;">
+    <i class="bi bi-cloud-arrow-down"></i> Tải xuống
+  </a>
+  {% else %}
+  <a href="{% url 'exclusive:remove_download' type item.id %}?next={{ request.path }}"
+    class="btn-glow d-inline-block text-decoration-none"
+    style="background: rgba(255,255,255,0.1); color: white; border: 1px solid rgba(255,255,255,0.2); width: auto; padding: 12px 30px; margin: 5px; border-radius: 30px;">
+    <i class="bi bi-cloud-arrow-down-fill"></i> Đã tải
+  </a>
+  {% endif %}
+
+  {% if not is_favorited %}
+  <a href="{% url 'exclusive:add_favorite' type item.id %}?next={{ request.path }}"
+    class="btn-glow d-inline-block text-decoration-none"
+    style="background: #e91e63; color: white; width: auto; padding: 12px 30px; margin: 5px; border-radius: 30px; font-weight: bold;">
+    <i class="bi bi-heart"></i> Yêu thích
+  </a>
+  {% else %}
+  <a href="{% url 'exclusive:remove_favorite' type item.id %}?next={{ request.path }}"
+    class="btn-glow d-inline-block text-decoration-none"
+    style="background: rgba(255,255,255,0.1); color: white; border: 1px solid rgba(255,255,255,0.2); width: auto; padding: 12px 30px; margin: 5px; border-radius: 30px;">
+    <i class="bi bi-heart-fill" style="color: #ff006a;"></i> Đã thích
+  </a>
+  {% endif %}
+  {% endif %}
+</div>
+
+<div style="margin-top: 40px; text-align: left;">
+  <a href="{{ next_url }}" class="back-link-white">
+    <i class="bi bi-arrow-left"></i> Quay lại trang chủ
+  </a>
+</div>
+
+<style>
+  .back-link-white {
+    text-decoration: none !important;
+    color: white !important;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 600;
+    opacity: 0.8;
+    transition: all 0.3s ease;
+  }
+
+  .back-link-white:hover {
+    opacity: 1;
+    transform: translateX(-5px);
+    color: #fcf6ba !important;
+  }
+</style>
+
+{% endblock %}

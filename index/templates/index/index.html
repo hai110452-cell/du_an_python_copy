@@ -1,0 +1,155 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div style="display: flex; justify-content: space-between; align-items: center; margin-top: 20px;">
+  <h1 class="gold-gradient-text" style="font-size: 2rem; margin: 0; text-transform: capitalize;">Những bài nhạc mới</h1>
+  <a href="{% url 'index:music_all' %}?next=/" class="view-all-white">
+    Xem tất cả →
+  </a>
+</div>
+<hr style="border-color: rgba(255,255,255,0.1);" />
+
+<div class="row">
+  {% for music in musics %}
+  <div class="col-md-2 col-sm-6 mb-4">
+    <div class="song-card">
+      <div class="song-img-container">
+        {% if music.image %}
+        <img src="{{ music.image.url }}" class="card-img-top" style="height: 200px; object-fit: cover" />
+        {% endif %}
+
+        <div class="song-overlay">
+          <a href="#" class="overlay-icon"><i class="bi bi-heart"></i></a>
+          <a href="{% url 'index:music_detail' music.id %}" class="overlay-icon play-main">
+            <i class="bi bi-play-circle-fill"></i>
+          </a>
+          <a href="#" class="overlay-icon"><i class="bi bi-three-dots"></i></a>
+        </div>
+      </div>
+
+      <div class="card-body">
+        <a href="{% url 'index:music_detail' music.id %}" class="card-title-link">
+          {{ music.title }}
+        </a>
+      </div>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+
+{% if not musics %}
+<p style="color: gray; font-style: italic;">Chưa có bài nhạc nào.</p>
+{% endif %}
+
+<hr style="border-color: rgba(255,255,255,0.1);" />
+
+<div style="display: flex; justify-content: space-between; align-items: center">
+  <h1 class="gold-gradient-text" style="font-size: 2rem; margin: 0; text-transform: capitalize;">Những bài nhạc nghe
+    nhiều nhất</h1>
+  <a href="{% url 'index:hot_all' %}?next=/" class="view-all-white">
+    Xem tất cả →
+  </a>
+</div>
+<hr style="border-color: rgba(255,255,255,0.1);" />
+
+<div class="row">
+  {% for hot in musics_hot %}
+  <div class="col-md-2 col-sm-6 mb-4">
+    <div class="song-card">
+      <div class="song-img-container">
+        {% if hot.image %}
+        <img src="{{ hot.image.url }}" class="card-img-top" style="height: 200px; object-fit: cover" />
+        {% endif %}
+
+        <div class="song-overlay">
+          <a href="#" class="overlay-icon"><i class="bi bi-heart"></i></a>
+          <a href="{% url 'index:musichot_detail' hot.id %}" class="overlay-icon play-main">
+            <i class="bi bi-play-circle-fill"></i>
+          </a>
+          <a href="#" class="overlay-icon"><i class="bi bi-three-dots"></i></a>
+        </div>
+      </div>
+
+      <div class="card-body">
+        <a href="{% url 'index:musichot_detail' hot.id %}" class="card-title-link">
+          {{ hot.title }}
+        </a>
+      </div>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+
+{% if not musics_hot %}
+<p style="color: gray; font-style: italic;">Chưa có bài nhạc nào.</p>
+{% endif %}
+
+<hr style="border-color: rgba(255,255,255,0.1);" />
+
+<div style="display: flex; justify-content: space-between; align-items: center">
+  <h1 class="gold-gradient-text" style="font-size: 2rem; margin: 0; text-transform: capitalize;">Những bài nhạc độc
+    quyền</h1>
+  <a href="{% url 'exclusive:all' %}?next={{ request.path }}" class="view-all-white">
+    Xem tất cả →
+  </a>
+</div>
+<hr style="border-color: rgba(255,255,255,0.1);" />
+
+<div class="row">
+  {% for item in exclusive_items %}
+  <div class="col-md-2 col-sm-6 mb-4">
+    <div class="song-card">
+      <div class="song-img-container">
+        {% if item.image %}
+        <img src="{{ item.image.url }}" class="card-img-top" style="height: 200px; object-fit: cover" />
+        {% endif %}
+
+        <div class="song-overlay">
+          <a href="#" class="overlay-icon"><i class="bi bi-heart"></i></a>
+          <a href="{% url 'exclusive:detail' item.pk %}?next={{ request.path }}" class="overlay-icon play-main">
+            <i class="bi bi-play-circle-fill"></i>
+          </a>
+          <a href="#" class="overlay-icon"><i class="bi bi-three-dots"></i></a>
+        </div>
+      </div>
+
+      <div class="card-body">
+        <a href="{% url 'exclusive:detail' item.pk %}?next={{ request.path }}" class="card-title-link">
+          {{ item.title }}
+        </a>
+      </div>
+    </div>
+  </div>
+  {% empty %}
+  <p style="color: gray; font-style: italic;">Chưa có bài nhạc nào.</p>
+  {% endfor %}
+</div>
+
+<style>
+  .view-all-white {
+    text-decoration: none;
+    color: white !important;
+    font-weight: 600;
+    opacity: 0.8;
+    transition: all 0.3s ease;
+    text-transform: capitalize;
+  }
+
+  .view-all-white:hover {
+    opacity: 1;
+    text-shadow: 0 0 8px rgba(255, 255, 255, 0.3);
+  }
+
+  .card-title-link {
+    color: white;
+    text-decoration: none;
+    font-weight: 600;
+    transition: color 0.3s;
+  }
+
+  .card-title-link:hover {
+    color: #fcf6ba;
+  }
+</style>
+
+{% endblock %}

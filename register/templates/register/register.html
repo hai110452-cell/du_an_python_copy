@@ -1,0 +1,206 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="login-page-wrapper">
+  <div class="login-form-card">
+    <div class="auth-tabs">
+      <a href="{% url 'login' %}" class="auth-tab {% if '/login' in request.path %}active{% endif %}">Đăng nhập</a>
+      <a href="{% url 'register:register' %}"
+        class="auth-tab {% if '/register' in request.path %}active{% endif %}">Đăng ký</a>
+    </div>
+
+    <form method="post" class="custom-django-form" id="authForm">
+      {% csrf_token %}
+      <div class="form-fields-container">
+        {{ form.as_p }}
+      </div>
+      <button type="submit" class="btn-primary-gold">
+        {% if '/register' in request.path %}ĐĂNG KÝ{% else %}ĐĂNG NHẬP{% endif %}
+      </button>
+    </form>
+
+    {% if form.errors %}
+    <div class="auth-error-container">
+      <p class="auth-error-msg">Vui lòng kiểm tra lại thông tin</p>
+    </div>
+    {% endif %}
+  </div>
+</div>
+
+<style>
+  /* RESET & NỀN */
+  * {
+    outline: none !important;
+    box-shadow: none !important;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  html,
+  body {
+    background-color: #000000 !important;
+    margin: 0;
+    padding: 0;
+  }
+
+  .login-page-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background: #000000;
+  }
+
+  .login-form-card {
+    background: #121212;
+    width: 100%;
+    max-width: 450px;
+    padding: 50px 40px;
+    border-radius: 25px;
+    border: 1px solid #bf953f;
+    box-shadow: 0 0 40px rgba(191, 149, 63, 0.2) !important;
+    text-align: center;
+    font-family: 'Arial', sans-serif;
+  }
+
+  /* TABS */
+  .auth-tabs {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    margin-bottom: 40px;
+    border-bottom: 1px solid rgba(191, 149, 63, 0.2);
+    padding-bottom: 20px;
+  }
+
+  .auth-tab {
+    text-decoration: none;
+    color: #444;
+    font-family: 'Playfair Display', serif;
+    font-weight: 900;
+    font-size: 1.4rem;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  .auth-tab.active {
+    color: #fcf6ba;
+    text-shadow: 0 0 15px rgba(191, 149, 63, 0.6);
+    position: relative;
+  }
+
+  .auth-tab.active::after {
+    content: '';
+    position: absolute;
+    bottom: -21px;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background: linear-gradient(to right, #bf953f, #fcf6ba);
+  }
+
+  /* FORM DJANGO STYLE */
+  .custom-django-form p {
+    text-align: left;
+    margin-bottom: 25px;
+    position: relative;
+  }
+
+  .custom-django-form label {
+    display: block;
+    font-size: 0.75rem;
+    color: #bf953f;
+    margin-bottom: 10px;
+    font-weight: bold;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    padding-left: 20px;
+  }
+
+  .custom-django-form input {
+    width: 100%;
+    background: #000 !important;
+    border: 1.5px solid #bf953f !important;
+    border-radius: 100px;
+    /* Oval hoàn toàn */
+    padding: 12px 50px 12px 25px;
+    color: #ffffff !important;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    box-sizing: border-box;
+  }
+
+  /* Ép màu đen cho Autofill trình duyệt */
+  .custom-django-form input:-webkit-autofill {
+    -webkit-text-fill-color: #ffffff !important;
+    -webkit-box-shadow: 0 0 0px 1000px #000 inset !important;
+    transition: background-color 5000s ease-in-out 0s;
+  }
+
+  /* STYLE CON MẮT */
+  .toggle-password-eye {
+    position: absolute;
+    right: 20px;
+    top: 42px;
+    /* Căn giữa theo chiều dọc của input */
+    color: #bf953f;
+    cursor: pointer;
+    font-size: 1.2rem;
+    z-index: 10;
+  }
+
+  /* NÚT BẤM */
+  .btn-primary-gold {
+    width: 100%;
+    font-family: 'Playfair Display', serif;
+    font-weight: 900;
+    font-size: 1.1rem;
+    border: none;
+    height: 60px;
+    border-radius: 100px;
+    background: linear-gradient(135deg, #bf953f, #aa771c);
+    color: #fff;
+    text-transform: uppercase;
+    cursor: pointer;
+    margin-top: 15px;
+    letter-spacing: 2px;
+    transition: all 0.3s ease;
+  }
+
+  .btn-primary-gold:hover {
+    transform: translateY(-3px);
+    filter: brightness(1.2);
+  }
+
+  .auth-error-msg {
+    color: #ff4d4d;
+    font-size: 0.85rem;
+    font-weight: bold;
+    margin-top: 15px;
+  }
+</style>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    // Tìm tất cả các ô input mật khẩu
+    const passwordInputs = document.querySelectorAll('input[type="password"]');
+
+    passwordInputs.forEach((input) => {
+      // 1. Tạo biểu tượng con mắt
+      const eyeIcon = document.createElement('i');
+      eyeIcon.className = 'bi bi-eye-slash toggle-password-eye';
+
+      // Chèn con mắt vào ngay sau ô input
+      input.parentNode.insertBefore(eyeIcon, input.nextSibling);
+
+      // Sự kiện click ẩn/hiện mật khẩu
+      eyeIcon.addEventListener('click', function () {
+        const type = input.getAttribute('type') === 'password' ? 'text' : 'password';
+        input.setAttribute('type', type);
+        this.classList.toggle('bi-eye');
+        this.classList.toggle('bi-eye-slash');
+      });
+    });
+  });
+</script>
+{% endblock %}

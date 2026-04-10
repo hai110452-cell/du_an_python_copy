@@ -1,0 +1,216 @@
+{% extends "base.html" %}
+{% block content %}
+
+<style>
+  .music-player-container {
+    max-width: 700px;
+    margin: 0 auto;
+  }
+
+  .player-controls {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 30px;
+    margin-bottom: 25px;
+  }
+
+  .btn-player-icon {
+    background: none;
+    border: none;
+    color: #b3b3b3;
+    font-size: 1.5rem;
+    cursor: pointer;
+    transition: 0.3s;
+    display: flex;
+    align-items: center;
+  }
+
+  .btn-player-icon:hover {
+    color: white;
+    transform: scale(1.1);
+  }
+
+  .play-main-btn {
+    font-size: 3.5rem;
+    color: white;
+  }
+
+  .timeline-container {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    color: white;
+    font-size: 0.9rem;
+    margin-bottom: 30px;
+  }
+
+  .progress-bar-custom {
+    flex: 1;
+    height: 6px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 10px;
+    cursor: pointer;
+    position: relative;
+  }
+
+  .progress-fill {
+    height: 100%;
+    background: white;
+    border-radius: 10px;
+    width: 0%;
+  }
+
+  .player-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 50px;
+    padding: 20px 0;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    width: 100%;
+  }
+
+  .back-link-white {
+    color: white !important;
+    text-decoration: none !important;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    opacity: 0.8;
+  }
+
+  .back-link-white:hover {
+    opacity: 1;
+    transform: translateX(-5px);
+    color: #fcf6ba !important;
+  }
+
+  .date-text {
+    color: white !important;
+    opacity: 0.6;
+    font-size: 0.9rem;
+  }
+</style>
+
+<div style="text-align: center; padding-top: 20px;">
+  <h2 style="font-size: 2.8rem; margin-bottom: 10px; color: white !important; font-weight: 900;">{{ item.title }}</h2>
+  <p style="opacity: 0.7; font-style: italic; color: #e2e8f0;">{{ item.content }}</p>
+
+  {% if item.image %}
+  <img src="{{ item.image.url }}"
+    style="max-width: 350px; border-radius: 20px; box-shadow: 0 15px 35px rgba(0,0,0,0.6); margin: 25px 0;" />
+  {% endif %}
+</div>
+
+<div class="music-player-container">
+  {% if item.audio %}
+  <audio id="myAudio">
+    <source src="{{ item.audio.url }}" type="audio/mpeg" />
+  </audio>
+
+  <div class="player-controls">
+    <button class="btn-player-icon"><i class="bi bi-shuffle"></i></button>
+    <button class="btn-player-icon"><i class="bi bi-skip-start-fill"></i></button>
+    <button class="btn-player-icon" onclick="togglePlay()">
+      <i id="play-btn-main" class="bi bi-play-circle-fill play-main-btn"></i>
+    </button>
+    <button class="btn-player-icon"><i class="bi bi-skip-end-fill"></i></button>
+    <button class="btn-player-icon"><i class="bi bi-arrow-repeat"></i></button>
+  </div>
+
+  <div class="timeline-container">
+    <span id="current-time">00:00</span>
+    <div class="progress-bar-custom" id="progress-container" onclick="setProgress(event)">
+      <div class="progress-fill" id="progress-fill"></div>
+    </div>
+    <span id="total-duration">00:00</span>
+  </div>
+
+  <div class="text-center mt-4">
+    {% if is_downloaded %}
+    <a href="{% url 'index:remove_download' type item.id %}?next={{ request.path }}"
+      class="btn btn-secondary rounded-pill px-4 me-2">
+      <i class="bi bi-cloud-arrow-down-fill"></i> Xóa khỏi máy
+    </a>
+    {% else %}
+    <a href="{% url 'index:add_download' type item.id %}?next={{ request.path }}"
+      class="btn btn-success rounded-pill px-4 me-2">
+      <i class="bi bi-cloud-arrow-down"></i> Tải xuống
+    </a>
+    {% endif %}
+
+    {% if is_favorited %}
+    <a href="{% url 'index:remove_favorite' type item.id %}?next={{ request.path }}"
+      class="btn btn-secondary rounded-pill px-4">
+      <i class="bi bi-heart-fill"></i> Bỏ thích
+    </a>
+    {% else %}
+    <a href="{% url 'index:add_favorite' type item.id %}?next={{ request.path }}"
+      class="btn btn-danger rounded-pill px-4">
+      <i class="bi bi-heart"></i> Yêu thích
+    </a>
+    {% endif %}
+  </div>
+
+  <script>
+    const audio = document.getElementById("myAudio");
+    const playBtn = document.getElementById("play-btn-main");
+    const progressFill = document.getElementById("progress-fill");
+    const currentTimeEl = document.getElementById("current-time");
+    const totalDurationEl = document.getElementById("total-duration");
+
+    function togglePlay() {
+      if (audio.paused) {
+        audio.play();
+        playBtn.classList.replace("bi-play-circle-fill", "bi-pause-circle-fill");
+      } else {
+        audio.pause();
+        playBtn.classList.replace("bi-pause-circle-fill", "bi-play-circle-fill");
+      }
+    }
+
+    function formatTime(seconds) {
+      if (isNaN(seconds)) return "00:00";
+      let min = Math.floor(seconds / 60);
+      let sec = Math.floor(seconds % 60);
+      return (min < 10 ? "0" + min : min) + ":" + (sec < 10 ? "0" + sec : sec);
+    }
+
+    audio.addEventListener("loadedmetadata", () => {
+      totalDurationEl.textContent = formatTime(audio.duration);
+    });
+
+    audio.addEventListener("timeupdate", () => {
+      currentTimeEl.textContent = formatTime(audio.currentTime);
+      const progressPercent = (audio.currentTime / audio.duration) * 100;
+      progressFill.style.width = progressPercent + "%";
+    });
+
+    audio.addEventListener("ended", () => {
+      playBtn.classList.replace("bi-pause-circle-fill", "bi-play-circle-fill");
+      progressFill.style.width = "0%";
+    });
+
+    function setProgress(e) {
+      const width = document.getElementById("progress-container").clientWidth;
+      const clickX = e.offsetX;
+      const duration = audio.duration;
+      audio.currentTime = (clickX / width) * duration;
+    }
+  </script>
+  {% endif %}
+</div>
+
+<div class="player-footer">
+  <div style="display: flex; gap: 20px;">
+    <a href="{{ next_url }}" class="back-link-white">
+      <i class="bi bi-arrow-left"></i> Quay lại
+    </a>
+  </div>
+  <span class="date-text">{{ item.date }}</span>
+</div>
+
+{% endblock %}

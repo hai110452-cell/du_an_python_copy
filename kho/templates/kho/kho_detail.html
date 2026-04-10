@@ -1,0 +1,61 @@
+{% extends "base.html" %} {% block content %}
+
+<div style="text-align: center">
+  <h2>{{ item.title }}</h2>
+
+  {% if item.image %}
+  <img src="{{ item.image.url }}" style="max-width: 300px" />
+  {% endif %}
+</div>
+
+<div style="text-align: center; margin-top: 20px">
+  {% if item.audio %}
+  <audio controls style="width: 300px">
+    <source src="{{ item.audio.url }}" type="audio/mpeg" />
+  </audio>
+  {% endif %}
+</div>
+<div style="text-align: center; margin-top: 20px">
+  {% if item.type == 'download' %}
+  <a
+    href="{% url 'kho:remove_download' item.source_type item.source_id %}?next=/kho/"
+    style="
+      background: red;
+      color: white;
+      padding: 8px 16px;
+      border-radius: 8px;
+      text-decoration: none;
+    "
+  >
+    Xóa khỏi đã tải
+  </a>
+  {% endif %} {% if item.type == 'favorite' %}
+  <a
+    href="{% url 'kho:remove_favorite' item.source_type item.source_id %}?next=/kho/"
+    style="
+      background: red;
+      color: white;
+      padding: 8px 16px;
+      border-radius: 8px;
+      text-decoration: none;
+    "
+  >
+    Xóa khỏi yêu thích
+  </a>
+  {% endif %}
+</div>
+
+<div
+  style="
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 50px;
+  "
+>
+  <a href="{% url 'kho:kho_list' %}" style="text-decoration: none; color: blue"
+    >← Quay lại kho</a
+  >
+</div>
+
+{% endblock %}

@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+{% block page_title %} {{ title }} {% endblock %}
+{% block content %}
+
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+  <h1 class="gold-gradient-text" style="font-size: 2.5rem; margin: 0;">{{ title }}</h1>
+
+  <a href="/category/"
+    style="text-decoration: none; color: white; font-weight: 600; opacity: 0.8; transition: opacity 0.3s;"
+    onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.8'">
+    Xem tất cả →
+  </a>
+</div>
+
+<hr style="border-color: rgba(255,255,255,0.1);" />
+
+{% for item in musics %}
+<div style="margin: 15px 0;">
+  <a href="{% url 'kho:kho_detail' item.id %}?next={{ request.path }}"
+    style="text-decoration: none; display: flex; align-items: center; transition: all 0.3s;" class="list-item-hover">
+
+    {% if item.image %}
+    <img src="{{ item.image.url }}"
+      style="width: 100px; height: 100px; object-fit: cover; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.4);" />
+    {% endif %}
+
+    <span style="
+        margin-left: 20px;
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: white; 
+        font-family: 'Inter', sans-serif;
+        text-decoration: none;
+      ">
+      {{ item.title }}
+    </span>
+  </a>
+</div>
+<hr style="border-color: rgba(255,255,255,0.05);" />
+{% endfor %}
+
+<div style="margin-top: 50px; display: flex; gap: 30px; align-items: center; padding-bottom: 40px;">
+  <a href="{{ request.GET.next|default:'/' }}" class="back-link-white">
+    <i class="bi bi-arrow-left"></i> Quay lại
+  </a>
+</div>
+
+<style>
+  .back-link-white {
+    text-decoration: none !important;
+    color: white !important;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    opacity: 0.7;
+  }
+
+  .back-link-white:hover {
+    opacity: 1;
+    transform: translateX(-5px);
+    color: #fcf6ba !important;
+  }
+
+  .list-item-hover:hover span {
+    color: #fcf6ba !important;
+    transition: color 0.3s ease;
+  }
+
+  .list-item-hover:hover img {
+    transform: scale(1.05);
+    transition: transform 0.3s ease;
+    filter: brightness(1.1);
+  }
+</style>
+
+{% endblock %}

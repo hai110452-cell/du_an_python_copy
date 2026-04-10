@@ -1,0 +1,234 @@
+{% extends "base.html" %} {% block content %}
+
+<div style="display: flex; justify-content: space-between; align-items: center; margin-top: 20px;">
+  <h1 class="gold-gradient-text" style="font-size: 2rem; margin: 0;">Nhạc Pop</h1>
+  <a href="{% url 'category:category_all' %}?next={{ request.path }}" class="view-all-white">Xem tất cả →</a>
+</div>
+<hr style="border-color: rgba(255,255,255,0.1);" />
+<div class="row">
+  {% for item in categories %}
+  <div class="col-md-2 col-sm-6 mb-4">
+    <div class="song-card">
+      <div class="song-img-container">
+        {% if item.image %}
+        <img src="{{ item.image.url }}" class="card-img-top" style="height: 200px; object-fit: cover" />
+        {% endif %}
+        <div class="song-overlay">
+          <a href="{% url 'category:category_detail' item.id %}?next={{ request.path }}" class="overlay-icon play-main">
+            <i class="bi bi-play-circle-fill"></i>
+          </a>
+        </div>
+      </div>
+      <div class="card-body">
+        <a href="{% url 'category:category_detail' item.id %}?next={{ request.path }}" class="card-title-link">
+          {{ item.title }}
+        </a>
+      </div>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+{% if not categories %}
+<p style="color: gray; font-style: italic;">Chưa có bài nhạc nào trong mục này.</p>
+{% endif %}
+
+<div style="display: flex; justify-content: space-between; align-items: center; margin-top: 40px;">
+  <h1 class="gold-gradient-text" style="font-size: 2rem; margin: 0;">Nhạc Rock</h1>
+  <a href="{% url 'category:rock_all' %}?next={{ request.path }}" class="view-all-white">Xem tất cả →</a>
+</div>
+<hr style="border-color: rgba(255,255,255,0.1);" />
+<div class="row">
+  {% for item in rocks %}
+  <div class="col-md-2 col-sm-6 mb-4">
+    <div class="song-card">
+      <div class="song-img-container">
+        {% if item.image %}
+        <img src="{{ item.image.url }}" class="card-img-top" style="height: 200px; object-fit: cover" />
+        {% endif %}
+        <div class="song-overlay">
+          <a href="{% url 'category:rock_detail' item.id %}?next={{ request.path }}" class="overlay-icon play-main">
+            <i class="bi bi-play-circle-fill"></i>
+          </a>
+        </div>
+      </div>
+      <div class="card-body">
+        <a href="{% url 'category:rock_detail' item.id %}?next={{ request.path }}" class="card-title-link">
+          {{ item.title }}
+        </a>
+      </div>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+{% if not rocks %}
+<p style="color: gray; font-style: italic;">Chưa có bài nhạc nào trong mục này.</p>
+{% endif %}
+
+<div style="display: flex; justify-content: space-between; align-items: center; margin-top: 40px;">
+  <h1 class="gold-gradient-text" style="font-size: 2rem; margin: 0;">Nhạc Hip-hop/Rap</h1>
+  <a href="{% url 'category:hiprap_all' %}?next={{ request.path }}" class="view-all-white">Xem tất cả →</a>
+</div>
+<hr style="border-color: rgba(255,255,255,0.1);" />
+<div class="row">
+  {% for item in hipraps %}
+  <div class="col-md-2 col-sm-6 mb-4">
+    <div class="song-card">
+      <div class="song-img-container">
+        {% if item.image %}
+        <img src="{{ item.image.url }}" class="card-img-top" style="height: 200px; object-fit: cover" />
+        {% endif %}
+        <div class="song-overlay">
+          <a href="{% url 'category:hiprap_detail' item.id %}?next={{ request.path }}" class="overlay-icon play-main">
+            <i class="bi bi-play-circle-fill"></i>
+          </a>
+        </div>
+      </div>
+      <div class="card-body">
+        <a href="{% url 'category:hiprap_detail' item.id %}?next={{ request.path }}" class="card-title-link">
+          {{ item.title }}
+        </a>
+      </div>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+{% if not hipraps %}
+<p style="color: gray; font-style: italic;">Chưa có bài nhạc nào trong mục này.</p>
+{% endif %}
+
+<div style="display: flex; justify-content: space-between; align-items: center; margin-top: 40px;">
+  <h1 class="gold-gradient-text" style="font-size: 2rem; margin: 0;">EDM (Electronic Dance Music)</h1>
+  <a href="{% url 'category:edm_all' %}?next={{ request.path }}" class="view-all-white">Xem tất cả →</a>
+</div>
+<hr style="border-color: rgba(255,255,255,0.1);" />
+<div class="row">
+  {% for item in edms %}
+  <div class="col-md-2 col-sm-6 mb-4">
+    <div class="song-card">
+      <div class="song-img-container">
+        {% if item.image %}
+        <img src="{{ item.image.url }}" class="card-img-top" style="height: 200px; object-fit: cover" />
+        {% endif %}
+        <div class="song-overlay">
+          <a href="{% url 'category:edm_detail' item.id %}?next={{ request.path }}" class="overlay-icon play-main">
+            <i class="bi bi-play-circle-fill"></i>
+          </a>
+        </div>
+      </div>
+      <div class="card-body">
+        <a href="{% url 'category:edm_detail' item.id %}?next={{ request.path }}" class="card-title-link">
+          {{ item.title }}
+        </a>
+      </div>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+{% if not edms %}
+<p style="color: gray; font-style: italic;">Chưa có bài nhạc nào trong mục này.</p>
+{% endif %}
+
+<div style="display: flex; justify-content: space-between; align-items: center; margin-top: 40px;">
+  <h1 class="gold-gradient-text" style="font-size: 2rem; margin: 0;">Nhạc Việt</h1>
+  <a href="{% url 'category:viet_all' %}?next={{ request.path }}" class="view-all-white">Xem tất cả →</a>
+</div>
+<hr style="border-color: rgba(255,255,255,0.1);" />
+<div class="row">
+  {% for item in viets %}
+  <div class="col-md-2 col-sm-6 mb-4">
+    <div class="song-card">
+      <div class="song-img-container">
+        {% if item.image %}
+        <img src="{{ item.image.url }}" class="card-img-top" style="height: 200px; object-fit: cover" />
+        {% endif %}
+        <div class="song-overlay">
+          <a href="{% url 'category:viet_detail' item.id %}?next={{ request.path }}" class="overlay-icon play-main">
+            <i class="bi bi-play-circle-fill"></i>
+          </a>
+        </div>
+      </div>
+      <div class="card-body">
+        <a href="{% url 'category:viet_detail' item.id %}?next={{ request.path }}" class="card-title-link">
+          {{ item.title }}
+        </a>
+      </div>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+{% if not viets %}
+<p style="color: gray; font-style: italic;">Chưa có bài nhạc nào trong mục này.</p>
+{% endif %}
+
+<div style="display: flex; justify-content: space-between; align-items: center; margin-top: 40px;">
+  <h1 class="gold-gradient-text" style="font-size: 2rem; margin: 0;">Nhạc Ballad</h1>
+  <a href="{% url 'category:ballad_all' %}?next={{ request.path }}" class="view-all-white">Xem tất cả →</a>
+</div>
+<hr style="border-color: rgba(255,255,255,0.1);" />
+<div class="row">
+  {% for item in ballads %}
+  <div class="col-md-2 col-sm-6 mb-4">
+    <div class="song-card">
+      <div class="song-img-container">
+        {% if item.image %}
+        <img src="{{ item.image.url }}" class="card-img-top" style="height: 200px; object-fit: cover" />
+        {% endif %}
+        <div class="song-overlay">
+          <a href="{% url 'category:ballad_detail' item.id %}?next={{ request.path }}" class="overlay-icon play-main">
+            <i class="bi bi-play-circle-fill"></i>
+          </a>
+        </div>
+      </div>
+      <div class="card-body">
+        <a href="{% url 'category:ballad_detail' item.id %}?next={{ request.path }}" class="card-title-link">
+          {{ item.title }}
+        </a>
+      </div>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+{% if not ballads %}
+<p style="color: gray; font-style: italic;">Chưa có bài nhạc nào trong mục này.</p>
+{% endif %}
+<style>
+  .view-all-white {
+    text-decoration: none;
+    color: white;
+    font-weight: 600;
+    opacity: 0.8;
+    transition: all 0.3s ease;
+  }
+
+  .view-all-white:hover {
+    opacity: 1;
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+  }
+
+  .back-link {
+    text-decoration: none !important;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+  }
+
+  .back-link:hover {
+    transform: translateX(-5px);
+    color: #fcf6ba !important;
+  }
+
+  .card-title-link {
+    color: white;
+    text-decoration: none;
+    font-weight: 600;
+    transition: color 0.3s;
+  }
+
+  .card-title-link:hover {
+    color: #fcf6ba;
+  }
+</style>
+
+{% endblock %}

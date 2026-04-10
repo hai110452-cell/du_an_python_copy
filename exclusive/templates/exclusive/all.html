@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+{% block page_title %} Tất cả bài nhạc độc quyền {% endblock %}
+{% block content %}
+
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+  <h1 class="gold-gradient-text" style="font-size: 2.5rem; margin: 0;">Những bài nhạc độc quyền</h1>
+  <a href="/category/"
+    style="text-decoration: none; color: white; font-weight: 600; opacity: 0.8; transition: opacity 0.3s;"
+    onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.8'">
+    Xem tất cả →
+  </a>
+</div>
+
+<hr style="border-color: rgba(255,255,255,0.1);" />
+
+<div class="row">
+  {% for item in exclusive_items %}
+  <div class="col-md-2 col-sm-6 mb-4">
+    <div class="song-card">
+      <div class="song-img-container">
+        {% if item.image %}
+        <img src="{{ item.image.url }}" class="card-img-top" style="height: 200px; object-fit: cover" />
+        {% endif %}
+
+        <div class="song-overlay">
+          <a href="#" class="overlay-icon"><i class="bi bi-heart"></i></a>
+          <a href="{% url 'exclusive:detail' item.pk %}?next={{ request.path }}" class="overlay-icon play-main">
+            <i class="bi bi-play-circle-fill"></i>
+          </a>
+          <a href="#" class="overlay-icon"><i class="bi bi-three-dots"></i></a>
+        </div>
+      </div>
+
+      <div class="card-body">
+        <a href="{% url 'exclusive:detail' item.pk %}?next={{ request.path }}" class="card-title-link">
+          {{ item.title }}
+        </a>
+      </div>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+
+{% if not exclusive_items %}
+<p style="color: #888; font-style: italic;">Chưa có bài nhạc độc quyền nào.</p>
+{% endif %}
+
+<div style="margin-top: 50px; display: flex; gap: 30px; align-items: center; padding-bottom: 40px;">
+  <a href="{{ next_url|default:'/' }}" class="back-link" style="color: white !important;">
+    <i class="bi bi-arrow-left"></i> Quay lại trang chủ
+  </a>
+</div>
+
+<style>
+  .back-link {
+    text-decoration: none !important;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    opacity: 0.7;
+  }
+
+  .back-link:hover {
+    opacity: 1;
+    transform: translateX(-5px);
+    color: #fcf6ba !important;
+  }
+
+  .card-title-link {
+    color: white;
+    text-decoration: none;
+    font-weight: 600;
+    transition: color 0.3s;
+  }
+
+  .card-title-link:hover {
+    color: #fcf6ba;
+  }
+</style>
+
+{% endblock %}

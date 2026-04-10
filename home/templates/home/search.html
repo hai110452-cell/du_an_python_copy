@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>Kết quả tìm kiếm: "{{ query }}"</h2>
+
+<hr />
+
+<div class="row">
+{% for item in results %}
+  <div class="col-md-2 mb-4">
+    <div class="glass-card">
+      {% if item.obj.image %}
+        <img src="{{ item.obj.image.url }}" 
+             class="card-img-top"
+             style="height:200px; object-fit:cover;">
+      {% endif %}
+
+      <div class="card-body text-center">
+        <h5 class="card-title">{{ item.obj.title }}</h5>
+        <p class="card-text" style="font-size: 0.9rem; opacity: 0.7;">{{ item.obj.content|truncatewords:5 }}</p>
+
+        {% if item.url_name %}
+          <a href="{% url item.url_name item.obj.id %}" 
+             class="btn-glow d-inline-block text-decoration-none" style="padding: 5px 15px; font-size: 0.9rem;">
+             Chi tiết
+          </a>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+{% empty %}
+  <p>Không tìm thấy kết quả</p>
+{% endfor %}
+</div>
+{% endblock %}

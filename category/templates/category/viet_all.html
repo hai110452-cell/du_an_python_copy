@@ -1,0 +1,117 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="music-player-page" style="text-align: center; color: white; padding-top: 40px;">
+
+  <h1 style="font-size: 3rem; font-family: 'Playfair Display', serif;">{{ viet.title }}</h1>
+  <p style="opacity: 0.7; font-size: 1.1rem; max-width: 700px; margin: 0 auto;">{{ viet.content }}</p>
+
+  <div style="margin: 40px 0;">
+    {% if viet.image %}
+    <img src="{{ viet.image.url }}"
+      style="width: 400px; height: 400px; object-fit: cover; border-radius: 30px; border: 1px solid rgba(255,255,255,0.1); box-shadow: 0 20px 50px rgba(0,0,0,0.9);">
+    {% endif %}
+  </div>
+
+  <div class="player-wrapper" style="max-width: 600px; margin: 0 auto;">
+    {% if viet.audio %}
+    <audio id="audioSource">
+      <source src="{{ viet.audio.url }}" type="audio/mpeg">
+    </audio>
+
+    <div style="display: flex; align-items: center; justify-content: center; gap: 30px; margin-bottom: 30px;">
+      <button class="ctrl-btn"><i class="bi bi-shuffle"></i></button>
+      <button class="ctrl-btn"><i class="bi bi-skip-start-fill"></i></button>
+
+      <button onclick="playMusic()" id="mainPlayBtn"
+        style="background: white; color: black; width: 70px; height: 70px; border-radius: 50%; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 2rem;">
+        <i id="iconState" class="bi bi-play-fill"></i>
+      </button>
+
+      <button class="ctrl-btn"><i class="bi bi-skip-end-fill"></i></button>
+      <button class="ctrl-btn"><i class="bi bi-repeat"></i></button>
+    </div>
+
+    <div style="display: flex; align-items: center; gap: 15px;">
+      <span id="timeCurrent">00:00</span>
+      <div id="progContainer" onclick="seek(event)"
+        style="flex: 1; height: 6px; background: rgba(255,255,255,0.1); border-radius: 10px; cursor: pointer; position: relative;">
+        <div id="progFill"
+          style="width: 0%; height: 100%; background: white; border-radius: 10px; transition: width 0.1s;"></div>
+      </div>
+      <span id="timeTotal">00:00</span>
+    </div>
+    {% endif %}
+  </div>
+
+  <div style="margin-top: 50px;">
+    <a href="#"
+      style="background: #1db954; color: white; padding: 15px 40px; border-radius: 50px; text-decoration: none; font-weight: bold; margin-right: 15px; display: inline-block;">
+      <i class="bi bi-cloud-arrow-down"></i> Tải xuống
+    </a>
+    <a href="#"
+      style="background: #e91e63; color: white; padding: 15px 40px; border-radius: 50px; text-decoration: none; font-weight: bold; display: inline-block;">
+      <i class="bi bi-heart"></i> Yêu thích
+    </a>
+  </div>
+
+  <div style="margin-top: 60px; text-align: left;">
+    <a href="/category/" style="color: white; text-decoration: none; opacity: 0.6;"><i class="bi bi-arrow-left"></i>
+      Quay lại</a>
+  </div>
+</div>
+
+<style>
+  .ctrl-btn {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 1.5rem;
+    cursor: pointer;
+    opacity: 0.7;
+    transition: 0.3s;
+  }
+
+  .ctrl-btn:hover {
+    opacity: 1;
+    transform: scale(1.1);
+  }
+</style>
+
+<script>
+  const music = document.getElementById("audioSource");
+  const icon = document.getElementById("iconState");
+  const fill = document.getElementById("progFill");
+
+  function playMusic() {
+    if (music.paused) {
+      music.play();
+      icon.classList.replace("bi-play-fill", "bi-pause-fill");
+    } else {
+      music.pause();
+      icon.classList.replace("bi-pause-fill", "bi-play-fill");
+    }
+  }
+
+  music.ontimeupdate = () => {
+    const per = (music.currentTime / music.duration) * 100;
+    fill.style.width = per + "%";
+    document.getElementById("timeCurrent").innerText = format(music.currentTime);
+  };
+
+  music.onloadedmetadata = () => {
+    document.getElementById("timeTotal").innerText = format(music.duration);
+  };
+
+  function format(s) {
+    let m = Math.floor(s / 60);
+    let sec = Math.floor(s % 60);
+    return (m < 10 ? '0' : '') + m + ":" + (sec < 10 ? '0' : '') + sec;
+  }
+
+  function seek(e) {
+    const w = document.getElementById("progContainer").clientWidth;
+    music.currentTime = (e.offsetX / w) * music.duration;
+  }
+</script>
+{% endblock %}

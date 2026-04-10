@@ -1,0 +1,207 @@
+{% extends "base.html" %}
+{% block content %}
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+<style>
+  /* 1. Tiêu đề và Link Xem tất cả */
+  .view-all-link {
+    color: #ffffff !important;
+    text-decoration: none !important;
+    font-size: 14px;
+    transition: opacity 0.2s;
+  }
+
+  .view-all-link:hover {
+    opacity: 0.7;
+  }
+
+  /* 2. Cấu trúc Card vuông */
+  .card-square {
+    border-radius: 0 !important;
+    border: none;
+    background: transparent;
+    margin-bottom: 20px;
+  }
+
+  /* 3. Container ảnh và hiệu ứng Hover */
+  .img-container {
+    position: relative;
+    aspect-ratio: 1 / 1;
+    overflow: hidden;
+    border-radius: 0 !important;
+  }
+
+  .img-square {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 0 !important;
+    transition: transform 0.4s ease;
+  }
+
+  .hover-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    z-index: 2;
+  }
+
+  .img-container:hover .hover-overlay {
+    opacity: 1;
+  }
+
+  .img-container:hover .img-square {
+    transform: scale(1.05);
+  }
+
+  /* 4. Bộ điều khiển (Heart - Play - More) */
+  .overlay-controls {
+    display: flex;
+    align-items: center;
+    width: 85%;
+    justify-content: space-between;
+  }
+
+  .play-btn-circle {
+    width: 55px;
+    height: 55px;
+    background-color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #121212;
+    font-size: 20px;
+    transition: transform 0.2s;
+    text-decoration: none !important;
+  }
+
+  .play-btn-circle:hover {
+    transform: scale(1.1);
+  }
+
+  .control-icon {
+    color: white;
+    font-size: 20px;
+    text-decoration: none !important;
+    opacity: 0.9;
+  }
+
+  /* 5. Tiêu đề bài hát dưới ảnh */
+  .music-title {
+    color: #ffffff !important;
+    text-decoration: none !important;
+    display: block;
+    margin-top: 12px;
+    font-size: 13px;
+    font-weight: bold;
+    text-transform: uppercase;
+    /* IN HOA */
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+</style>
+
+<div style="display: flex; justify-content: space-between; align-items: center; margin-top: 20px;">
+  <h1>Nhạc đã tải</h1>
+  <a href="{% url 'kho:kho_download_all' %}?next={{ request.path }}" class="view-all-link">
+    Xem tất cả →
+  </a>
+</div>
+<hr class="border-secondary" />
+
+<div class="row">
+  {% for item in downloads %}
+  <div class="col-md-2 col-6 mb-4">
+    <div class="card card-square">
+      <div class="img-container">
+        {% if item.image %}
+        <img src="{{ item.image.url }}" class="img-square" />
+        {% else %}
+        <div class="img-square bg-dark d-flex align-items-center justify-content-center">
+          <small class="text-muted">NO IMAGE</small>
+        </div>
+        {% endif %}
+
+        <div class="hover-overlay">
+          <div class="overlay-controls">
+            <a href="#" class="control-icon"><i class="far fa-heart"></i></a>
+            <a href="{% url 'kho:kho_detail' item.id %}?next={{ request.path }}" class="play-btn-circle">
+              <i class="fas fa-play"></i>
+            </a>
+            <a href="#" class="control-icon"><i class="fas fa-ellipsis-h"></i></a>
+          </div>
+        </div>
+      </div>
+      <div class="card-body p-0">
+        <a href="{% url 'kho:kho_detail' item.id %}?next={{ request.path }}" class="music-title">
+          {{ item.title }}
+        </a>
+      </div>
+    </div>
+  </div>
+  {% empty %}
+  <div class="col-12">
+    <p class="text-muted">Chưa có bài nhạc nào đã tải.</p>
+  </div>
+  {% endfor %}
+</div>
+
+<hr class="border-secondary my-5" />
+
+<div style="display: flex; justify-content: space-between; align-items: center">
+  <h1>Nhạc bạn yêu thích</h1>
+  <a href="{% url 'kho:kho_favorite_all' %}?next={{ request.path }}" class="view-all-link">
+    Xem tất cả →
+  </a>
+</div>
+<hr class="border-secondary" />
+
+<div class="row">
+  {% for item in favorites %}
+  <div class="col-md-2 col-6 mb-4">
+    <div class="card card-square">
+      <div class="img-container">
+        {% if item.image %}
+        <img src="{{ item.image.url }}" class="img-square" />
+        {% else %}
+        <div class="img-square bg-dark d-flex align-items-center justify-content-center">
+          <small class="text-muted">NO IMAGE</small>
+        </div>
+        {% endif %}
+
+        <div class="hover-overlay">
+          <div class="overlay-controls">
+            <a href="#" class="control-icon"><i class="fas fa-heart text-danger"></i></a>
+            <a href="{% url 'kho:kho_detail' item.id %}?next={{ request.path }}" class="play-btn-circle">
+              <i class="fas fa-play"></i>
+            </a>
+            <a href="#" class="control-icon"><i class="fas fa-ellipsis-h"></i></a>
+          </div>
+        </div>
+      </div>
+      <div class="card-body p-0">
+        <a href="{% url 'kho:kho_detail' item.id %}?next={{ request.path }}" class="music-title">
+          {{ item.title }}
+        </a>
+      </div>
+    </div>
+  </div>
+  {% empty %}
+  <div class="col-12">
+    <p class="text-muted">Chưa có bài nhạc nào yêu thích.</p>
+  </div>
+  {% endfor %}
+</div>
+
+{% endblock %}
