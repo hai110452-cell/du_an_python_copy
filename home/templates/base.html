@@ -90,7 +90,7 @@
       text-transform: capitalize;
     }
 
-    .nav-link:hover {
+    .nav-link:hover, .nav-link.active {
       background: rgba(191, 149, 63, 0.15);
       color: #fff;
       opacity: 1;
@@ -220,7 +220,7 @@
             {% if user.is_authenticated %}
             <div class="dropdown">
               <a href="#" class="gold-text text-decoration-none dropdown-toggle" data-bs-toggle="dropdown"
-                style="font-family: 'Playfair Display', serif; font-weight: 900; font-size: 1.1rem; text-transform: uppercase;">
+                style="font-family: 'Playfair Display', serif; font-weight: 900; font-size: 1.1rem; text-transform: uppercase; color: #fcf6ba !important;">
                 <i class="bi bi-person-circle"></i> {{ user.username|upper }}
               </a>
               <ul class="dropdown-menu dropdown-menu-dark shadow border-gold" style="border: 1px solid #bf953f;">
@@ -249,10 +249,10 @@
     <div class="row mt-4">
       <div class="col-sm-2 ps-4">
         <ul class="nav flex-column">
-          <li><a class="nav-link" href="/">Trang chủ</a></li>
-          <li><a class="nav-link" href="/category/">Thể loại</a></li>
-          <li><a class="nav-link" href="/kho/">Thư viện</a></li>
-          <li><a class="nav-link" href="/docquyen/">Độc quyền</a></li>
+          <li><a class="nav-link {% if request.path == '/' %}active{% endif %}" href="/">Trang chủ</a></li>
+          <li><a class="nav-link {% if '/category/' in request.path %}active{% endif %}" href="/category/">Thể loại</a></li>
+          <li><a class="nav-link {% if '/kho/' in request.path %}active{% endif %}" href="/kho/">Thư viện</a></li>
+          <li><a class="nav-link {% if '/docquyen/' in request.path %}active{% endif %}" href="/docquyen/">Độc quyền</a></li>
         </ul>
       </div>
 

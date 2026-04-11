@@ -14,30 +14,33 @@
 
 <hr style="border-color: rgba(255,255,255,0.1);" />
 
-{% for item in musics %}
-<div style="margin: 15px 0;">
-  <a href="{% url 'kho:kho_detail' item.id %}?next={{ request.path }}"
-    style="text-decoration: none; display: flex; align-items: center; transition: all 0.3s;" class="list-item-hover">
+<div class="row">
+  {% for item in musics %}
+  <div class="col-md-2 col-sm-6 mb-4">
+    <div class="song-card">
+      <div class="song-img-container">
+        {% if item.image %}
+        <img src="{{ item.image.url }}" class="card-img-top" style="height: 200px; object-fit: cover" />
+        {% endif %}
 
-    {% if item.image %}
-    <img src="{{ item.image.url }}"
-      style="width: 100px; height: 100px; object-fit: cover; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.4);" />
-    {% endif %}
+        <div class="song-overlay">
+          <a href="#" class="overlay-icon"><i class="bi bi-heart"></i></a>
+          <a href="{% url 'kho:kho_detail' item.id %}?next={{ request.path }}" class="overlay-icon play-main">
+            <i class="bi bi-play-circle-fill"></i>
+          </a>
+          <a href="#" class="overlay-icon"><i class="bi bi-three-dots"></i></a>
+        </div>
+      </div>
 
-    <span style="
-        margin-left: 20px;
-        font-size: 1.5rem;
-        font-weight: 700;
-        color: white; 
-        font-family: 'Inter', sans-serif;
-        text-decoration: none;
-      ">
-      {{ item.title }}
-    </span>
-  </a>
+      <div class="card-body">
+        <a href="{% url 'kho:kho_detail' item.id %}?next={{ request.path }}" class="card-title-link">
+          {{ item.title }}
+        </a>
+      </div>
+    </div>
+  </div>
+  {% endfor %}
 </div>
-<hr style="border-color: rgba(255,255,255,0.05);" />
-{% endfor %}
 
 <div style="margin-top: 50px; display: flex; gap: 30px; align-items: center; padding-bottom: 40px;">
   <a href="{{ request.GET.next|default:'/' }}" class="back-link-white">

@@ -5,24 +5,33 @@
 <h1 class="gold-gradient-text" style="font-size: 2.5rem; margin-bottom: 20px;">Danh sách Nhạc được nghe nhiều nhất</h1>
 <hr style="border-color: rgba(255,255,255,0.1);" />
 
-{% for hot in musics_hot %}
-<div style="margin: 15px 0;">
-  <a href="{% url 'index:musichot_detail' hot.id %}?next={{ request.path }}"
-    style="text-decoration: none; display: flex; align-items: center; transition: all 0.3s;" class="list-item-hover">
+<div class="row">
+  {% for hot in musics_hot %}
+  <div class="col-md-2 col-sm-6 mb-4">
+    <div class="song-card">
+      <div class="song-img-container">
+        {% if hot.image %}
+        <img src="{{ hot.image.url }}" class="card-img-top" style="height: 200px; object-fit: cover" />
+        {% endif %}
 
-    {% if hot.image %}
-    <img src="{{ hot.image.url }}"
-      style="width: 100px; height: 100px; object-fit: cover; border-radius: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.3);" />
-    {% endif %}
+        <div class="song-overlay">
+          <a href="#" class="overlay-icon"><i class="bi bi-heart"></i></a>
+          <a href="{% url 'index:musichot_detail' hot.id %}?next={{ request.path }}" class="overlay-icon play-main">
+            <i class="bi bi-play-circle-fill"></i>
+          </a>
+          <a href="#" class="overlay-icon"><i class="bi bi-three-dots"></i></a>
+        </div>
+      </div>
 
-    <span
-      style="margin-left: 20px; font-size: 1.5rem; font-weight: 700; color: white; font-family: 'Inter', sans-serif; transition: color 0.3s;">
-      {{ hot.title }}
-    </span>
-  </a>
+      <div class="card-body">
+        <a href="{% url 'index:musichot_detail' hot.id %}?next={{ request.path }}" class="card-title-link">
+          {{ hot.title }}
+        </a>
+      </div>
+    </div>
+  </div>
+  {% endfor %}
 </div>
-<hr style="border-color: rgba(255,255,255,0.05);" />
-{% endfor %}
 
 <div style="margin-top: 50px; padding-bottom: 40px;">
   <a href="/" class="back-link-white">
