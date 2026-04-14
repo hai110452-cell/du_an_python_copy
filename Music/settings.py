@@ -64,7 +64,7 @@ WSGI_APPLICATION = 'Music.wsgi.application'
 
 DATABASES = {
     'default': dj_database_url.config(
-        default=os.environ.get('DATABASE_URL', 'sqlite:///db.sqlite3')
+        default='sqlite:///db.sqlite3'
     )
 }
 
@@ -96,9 +96,7 @@ STATIC_URL = 'static/'
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')] # Nơi chứa file CSS/JS lúc bạn code
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')  # Nơi gom file khi chạy collectstatic
 
-# CẤU HÌNH FILE MEDIA (NHẠC/ẢNH)
-# MEDIA_URL = '/media/'
-# MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
 
 # Cấu hình nén và lưu trữ lâu dài cho WhiteNoise
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
