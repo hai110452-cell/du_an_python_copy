@@ -27,6 +27,7 @@ INSTALLED_APPS = [
     'category',
     'register',
     'whitenoise.runserver_nostatic', # Thêm dòng này để hỗ trợ WhiteNoise
+    'rest_framework',
     'cloudinary',
     'cloudinary_storage',
 ]
@@ -63,7 +64,7 @@ WSGI_APPLICATION = 'Music.wsgi.application'
 
 DATABASES = {
     'default': dj_database_url.config(
-        default=os.environ.get('DATABASE_URL')
+        default=os.environ.get('DATABASE_URL', 'sqlite:///db.sqlite3')
     )
 }
 

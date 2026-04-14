@@ -3,6 +3,16 @@ from .models import Music, MusicHot
 from kho.models import UserMusic
 from exclusive.models import ExclusiveItem
 from django.contrib.auth.decorators import login_required
+from rest_framework import generics
+from .serializers import MusicSerializer
+
+class MusicUploadAPI(generics.CreateAPIView):
+    queryset = Music.objects.all()
+    serializer_class = MusicSerializer
+
+class MusicHotUploadAPI(generics.CreateAPIView):
+    queryset = MusicHot.objects.all()
+    serializer_class = MusicSerializer
 
 def get_user_status(request, item_id, source_type):
     if request.user.is_authenticated:

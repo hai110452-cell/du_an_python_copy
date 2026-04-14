@@ -1,5 +1,6 @@
 from django.urls import path
 from . import views
+from .views import MusicUploadAPI, MusicHotUploadAPI
 
 app_name ='index'
 urlpatterns = [
@@ -18,4 +19,6 @@ urlpatterns = [
     path('remove-download/<str:type>/<int:id>/', views.remove_download, name='remove_download'),
     path('remove-favorite/<str:type>/<int:id>/', views.remove_favorite, name='remove_favorite'),
     # path("search/", views.search, name="search"),
+    path('api/music/upload/', MusicUploadAPI.as_view(), name='music-upload'),
+    path('api/hot/upload/', MusicHotUploadAPI.as_view(), name='hot-upload'),
 ]
