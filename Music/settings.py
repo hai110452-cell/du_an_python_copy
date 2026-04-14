@@ -63,9 +63,7 @@ TEMPLATES = [
 WSGI_APPLICATION = 'Music.wsgi.application'
 
 DATABASES = {
-    'default': dj_database_url.config(
-        default='sqlite:///db.sqlite3'
-    )
+    'default': dj_database_url.parse(os.environ["DATABASE_URL"])
 }
 
 AUTH_PASSWORD_VALIDATORS = [
