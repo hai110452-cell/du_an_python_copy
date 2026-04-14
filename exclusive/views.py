@@ -4,6 +4,12 @@ from django.contrib.auth.decorators import login_required
 from kho.models import UserMusic
 from index.models import Music
 from django.contrib import messages
+from rest_framework import generics
+from .serializers import ExclusiveSerializer
+
+class ExclusiveItemUploadAPI(generics.CreateAPIView):
+    queryset = ExclusiveItem.objects.all()
+    serializer_class = ExclusiveSerializer
 
 def home(request):
     items = ExclusiveItem.objects.all().order_by('-created_at')[:6]
