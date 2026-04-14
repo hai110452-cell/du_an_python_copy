@@ -1,6 +1,9 @@
 import os
 from pathlib import Path
 import dj_database_url
+import cloudinary
+import cloudinary.uploader
+import cloudinary.api
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -24,6 +27,8 @@ INSTALLED_APPS = [
     'category',
     'register',
     'whitenoise.runserver_nostatic', # Thêm dòng này để hỗ trợ WhiteNoise
+    'cloudinary',
+    'cloudinary_storage',
 ]
 
 MIDDLEWARE = [
@@ -91,8 +96,8 @@ STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')] # Nơi chứa file CSS/JS 
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')  # Nơi gom file khi chạy collectstatic
 
 # CẤU HÌNH FILE MEDIA (NHẠC/ẢNH)
-MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+# MEDIA_URL = '/media/'
+# MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 # Cấu hình nén và lưu trữ lâu dài cho WhiteNoise
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
@@ -101,3 +106,9 @@ LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+CLOUDINARY_STORAGE = {
+    'CLOUD_NAME': 'dbplmwlgh',
+    'API_KEY': '457493365959682',
+    'API_SECRET': 'JtSxkYiAbSFh3xpcQJ4JVVu3qIk',
+}
+DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
