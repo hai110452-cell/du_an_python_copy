@@ -1,6 +1,7 @@
 # usermusic/urls.py
 from django.urls import path
 from . import views
+from .views import UserMusicUploadAPI
 
 app_name = 'kho'
 urlpatterns = [
@@ -9,5 +10,7 @@ urlpatterns = [
     path('favorite/', views.kho_favorite_all, name='kho_favorite_all'),
     path('<int:id>/', views.kho_detail, name='kho_detail'), 
     path('remove-download/<str:type>/<int:id>/', views.remove_download, name='remove_download'),
-    path('remove-favorite/<str:type>/<int:id>/', views.remove_favorite, name='remove_favorite')
+    path('remove-favorite/<str:type>/<int:id>/', views.remove_favorite, name='remove_favorite'),
+
+    path('api/usermusic/upload/', UserMusicUploadAPI.as_view(), name='usermusic-upload'),
 ]

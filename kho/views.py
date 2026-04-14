@@ -1,7 +1,13 @@
 from django.shortcuts import render, get_object_or_404
 from .models import UserMusic
 from django.shortcuts import redirect
+from rest_framework import generics
+from .serializers import UserMusicSerializer
 
+class UserMusicUploadAPI(generics.CreateAPIView):
+    queryset = UserMusic.objects.all()
+    serializer_class = UserMusicSerializer
+    
 def kho_list(request):
     downloads = UserMusic.objects.filter(type='download')[:6]
     favorites = UserMusic.objects.filter(type='favorite')[:6]

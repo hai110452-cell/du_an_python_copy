@@ -2,6 +2,32 @@ from django.shortcuts import redirect, render, get_object_or_404
 from .models import Ballad, Category, Rock, Edm,  Viet, Hiprap
 from kho.models import UserMusic
 from django.contrib.auth.decorators import login_required
+from rest_framework import generics
+from .serializers import BalladSerializer, CategorySerializer, RockSerializer, EdmSerializer, VietSerializer, HiprapSerializer
+
+class CategoryUploadAPI(generics.CreateAPIView):
+    queryset = Category.objects.all()
+    serializer_class = CategorySerializer
+
+class BalladUploadAPI(generics.CreateAPIView):
+    queryset = Ballad.objects.all()
+    serializer_class = BalladSerializer
+
+class RockUploadAPI(generics.CreateAPIView):
+    queryset = Rock.objects.all()
+    serializer_class = RockSerializer
+
+class EdmUploadAPI(generics.CreateAPIView):
+    queryset = Edm.objects.all()
+    serializer_class = EdmSerializer
+
+class VietUploadAPI(generics.CreateAPIView):
+    queryset = Viet.objects.all()
+    serializer_class = VietSerializer
+
+class HiprapUploadAPI(generics.CreateAPIView):
+    queryset = Hiprap.objects.all()
+    serializer_class = HiprapSerializer
 
 @login_required(login_url='/accounts/login/')
 def add_download(request, type, id):
