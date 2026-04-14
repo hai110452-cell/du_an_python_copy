@@ -6,12 +6,14 @@ from django.http import HttpResponse
 from django.contrib.auth.models import User
 
 def make_admin(request):
-    User.objects.create_superuser(
-        username='admin',
-        email='admin@gmail.com',
-        password='123456'
-    )
-    return HttpResponse("admin created")
+    if not User.objects.filter(username='admin').exists():
+        User.objects.create_superuser(
+            username='admin',
+            email='admin@gmail.com',
+            password='123456'
+        )
+        return HttpResponse("admin created")
+    return HttpResponse("admin already exists")
 urlpatterns = [
     path('admin/', admin.site.urls),
 
