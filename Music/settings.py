@@ -9,7 +9,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = 'django-insecure-@q197fcbk1nb=ub2=hy79xgenzbs+btxiut2wyq1u(r(lgi0)b'
 
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['*'] # Để dấu * để dễ dàng chạy trên mọi server lúc mới deploy
 
