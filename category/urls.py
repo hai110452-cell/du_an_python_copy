@@ -1,6 +1,6 @@
 from django.urls import path
 from . import views
-from .views import CategoryUploadAPI, BalladUploadAPI, EdmUploadAPI, RockUploadAPI, HiprapUploadAPI, VietUploadAPI
+from .views import BalladUploadAPI, EdmUploadAPI, RockUploadAPI, HiprapUploadAPI, VietUploadAPI
 
 app_name = 'category'
 
@@ -23,15 +23,16 @@ urlpatterns = [
 
     path('viet_all/', views.viet_all, name='viet_all'),
     path('viet_detail/<int:id>/', views.viet_detail, name='viet_detail'),
+
     path('add_download/<str:type>/<int:id>/', views.add_download, name='add_download'),
     path('add_favorite/<str:type>/<int:id>/', views.add_favorite, name='add_favorite'),
     path('remove_download/<str:type>/<int:id>/', views.remove_download, name='remove_download'),
     path('remove_favorite/<str:type>/<int:id>/', views.remove_favorite, name='remove_favorite'),
 
-    path('api/category/upload/', CategoryUploadAPI.as_view(), name='category-upload'),
-    path('api/ballad/upload/', BalladUploadAPI.as_view(), name='ballad-upload'),
-    path('api/edm/upload/', EdmUploadAPI.as_view(), name='edm-upload'),
-    path('api/rock/upload/', RockUploadAPI.as_view(), name='rock-upload'),
-    path('api/hiprap/upload/', HiprapUploadAPI.as_view(), name='hiprap-upload'),
-    path('api/viet/upload/', VietUploadAPI.as_view(), name='viet-upload'),
+    # upload API
+    path('ballad/upload/', BalladUploadAPI.as_view(), name='ballad-upload'),
+    path('edm/upload/', EdmUploadAPI.as_view(), name='edm-upload'),
+    path('rock/upload/', RockUploadAPI.as_view(), name='rock-upload'),
+    path('hiprap/upload/', HiprapUploadAPI.as_view(), name='hiprap-upload'),
+    path('viet/upload/', VietUploadAPI.as_view(), name='viet-upload'),
 ]
