@@ -31,9 +31,10 @@ urlpatterns = [
 
     # upload API
     path('upload/', CategoryUploadAPI.as_view(), name='category-upload'),
-    path('category/ballad/upload/', BalladUploadAPI.as_view(), name='ballad-upload'),
-    path('category/edm/upload/', EdmUploadAPI.as_view(), name='edm-upload'),
-    path('category/rock/upload/', RockUploadAPI.as_view(), name='rock-upload'),
-    path('category/hiprap/upload/', HiprapUploadAPI.as_view(), name='hiprap-upload'),
-    path('category/viet/upload/', VietUploadAPI.as_view(), name='viet-upload'),
+
+    path('ballad/upload/', BalladUploadAPI.as_view(), name='ballad-upload'),
+    path('edm/upload/', EdmUploadAPI.as_view(), name='edm-upload'),
+    path('rock/upload/', RockUploadAPI.as_view(), name='rock-upload'),
+    path('hiprap/upload/', HiprapUploadAPI.as_view(), name='hiprap-upload'),
+    path('viet/upload/', VietUploadAPI.as_view(), name='viet-upload'),
 ]
