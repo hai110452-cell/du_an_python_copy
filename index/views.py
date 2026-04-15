@@ -12,7 +12,7 @@ class MusicUploadAPI(generics.CreateAPIView):
 
 class MusicHotUploadAPI(generics.CreateAPIView):
     queryset = MusicHot.objects.all()
-    serializer_class = MusicSerializer, MusicHotSerializer
+    serializer_class = MusicHotSerializer
 
 def get_user_status(request, item_id, source_type):
     if request.user.is_authenticated:
