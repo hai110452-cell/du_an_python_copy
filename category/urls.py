@@ -30,7 +30,7 @@ urlpatterns = [
     path('remove_favorite/<str:type>/<int:id>/', views.remove_favorite, name='remove_favorite'),
 
     # upload API
-    path('category/upload/', CategoryUploadAPI.as_view(), name='category-upload'),
+    path('upload/', CategoryUploadAPI.as_view(), name='category-upload'),
     path('ballad/upload/', BalladUploadAPI.as_view(), name='ballad-upload'),
     path('edm/upload/', EdmUploadAPI.as_view(), name='edm-upload'),
     path('rock/upload/', RockUploadAPI.as_view(), name='rock-upload'),
