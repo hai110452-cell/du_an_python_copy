@@ -14,5 +14,5 @@ urlpatterns = [
     path('remove-download/<str:type>/<int:id>/', views.remove_download, name='remove_download'),
     path('remove-favorite/<str:type>/<int:id>/', views.remove_favorite, name='remove_favorite'),
 
-    path('exclusive/upload/', ExclusiveItemUploadAPI.as_view(), name='exclusive-upload'),
+    path('upload/', ExclusiveItemUploadAPI.as_view(), name='exclusive-upload'),
 ]
